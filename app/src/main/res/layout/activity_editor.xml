@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,22 +29,25 @@
             <EditText
                 android:id="@+id/edit_book_name"
                 style="@style/EditorFieldStyle"
-                android:hint="@string/book_name"/>
+                android:hint="@string/book_name"
+                android:inputType="text" />
 
             <EditText
                 android:id="@+id/edit_book_price"
                 style="@style/EditorFieldStyle"
-                android:hint="@string/price" />
+                android:hint="@string/price"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:id="@+id/edit_book_quantity"
                 style="@style/EditorFieldStyle"
-                android:hint="@string/quantity" />
+                android:hint="@string/quantity"
+                android:inputType="number" />
         </LinearLayout>
 
 
-
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,15 +69,16 @@
             <EditText
                 android:id="@+id/edit_book_supplier"
                 style="@style/EditorFieldStyle"
-                android:hint="@string/supplier_name"/>
+                android:hint="@string/supplier_name"
+                android:inputType="text" />
 
             <EditText
                 android:id="@+id/edit_book_phone"
                 style="@style/EditorFieldStyle"
-                android:hint="@string/phone_number" />
+                android:hint="@string/phone_number"
+                android:inputType="number" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
