@@ -44,8 +44,8 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView supplierTextView = (TextView) view.findViewById(R.id.supplier);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
-        Button buyButton = (Button)view.findViewById(R.id.buy_button);
-        LinearLayout listItem = (LinearLayout)view.findViewById((R.id.single_item));
+        Button buyButton = (Button) view.findViewById(R.id.buy_button);
+        LinearLayout listItem = (LinearLayout) view.findViewById((R.id.single_item));
 
         // Find the columns of book attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
@@ -60,7 +60,6 @@ public class BookCursorAdapter extends CursorAdapter {
         Double bookPrice = cursor.getDouble(priceColumnIndex);
         final int bookQuantity = cursor.getInt(quantityColumnIndex);
         final int bookId = cursor.getInt(idColumnIndex);
-
 
 
         // Update the TextViews with the attributes for the current book

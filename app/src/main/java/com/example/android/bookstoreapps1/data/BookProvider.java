@@ -12,20 +12,21 @@ import android.util.Log;
 
 import com.example.android.bookstoreapps1.data.BookContract.BookEntry;
 
-import java.security.Provider;
-
-/**
- * {@link ContentProvider} for Pets app.
- */
 public class BookProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = BookProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the books table */
+    /**
+     * URI matcher code for the content URI for the books table
+     */
     private static final int BOOKS = 100;
 
-    /** URI matcher code for the content URI for a single book */
+    /**
+     * URI matcher code for the content URI for a single book
+     */
     private static final int BOOK_ID = 101;
 
     /**
@@ -35,12 +36,14 @@ public class BookProvider extends ContentProvider {
 
     // Static initializer. This is run the first time anything is called from this class.
     static {
-         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS);
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS);
 
         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS + "/#", BOOK_ID);
     }
 
-    /** Database helper object */
+    /**
+     * Database helper object
+     */
     private BookDbHelper mDbHelper;
 
     @Override
@@ -67,7 +70,7 @@ public class BookProvider extends ContentProvider {
                 break;
             case BOOK_ID:
                 selection = BookEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -93,7 +96,7 @@ public class BookProvider extends ContentProvider {
     }
 
     /**
-     * Insert a pet into the database with the given content values. Return the new content URI
+     * Insert a book into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
     private Uri insertBook(Uri uri, ContentValues values) {
@@ -105,13 +108,13 @@ public class BookProvider extends ContentProvider {
 
         // Check that the price is valid
         Double price = values.getAsDouble(BookEntry.COLUMN_BOOK_PRICE);
-        if (price == null || price < 0 ) {
+        if (price == null || price < 0) {
             throw new IllegalArgumentException("Book requires valid price");
         }
 
         // Check if the quantity is valid
         Integer quantity = values.getAsInteger(BookEntry.COLUMN_BOOK_QUANTITY);
-        if (quantity == null || quantity < 0 ) {
+        if (quantity == null || quantity < 0) {
             throw new IllegalArgumentException("Book requires valid quantity");
         }
         // Check that the supplier name is not null
@@ -154,7 +157,7 @@ public class BookProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = BookEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateBook(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -174,27 +177,26 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Book's name is required");
             }
         }
-
         if (values.containsKey(BookEntry.COLUMN_BOOK_PRICE)) {
-            Integer price = values.getAsInteger(BookEntry.COLUMN_BOOK_PRICE);
-            if (price == null || price < 0 ) {
+            double price = values.getAsDouble(BookEntry.COLUMN_BOOK_PRICE);
+            if (price < 0) {
                 throw new IllegalArgumentException("Book requires valid price");
             }
         }
 
         if (values.containsKey(BookEntry.COLUMN_BOOK_QUANTITY)) {
             Integer quantity = values.getAsInteger(BookEntry.COLUMN_BOOK_QUANTITY);
-            if (quantity == null || quantity < 0 ) {
+            if (quantity == null || quantity < 0) {
                 throw new IllegalArgumentException("Book requires valid quantity");
             }
         }
-        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_NAME)){
+        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_NAME)) {
             String supplierName = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
             if (supplierName == null) {
                 throw new IllegalArgumentException("You need to enter a supplier name");
             }
         }
-        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE)){
+        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE)) {
             Long phoneNumber = values.getAsLong(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
             if (phoneNumber == null || phoneNumber < 0)
                 throw new IllegalArgumentException("Suppliers phone number missing or invalid");
@@ -237,7 +239,7 @@ public class BookProvider extends ContentProvider {
             case BOOK_ID:
                 // Delete a single row given by the ID in the URI
                 selection = BookEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:

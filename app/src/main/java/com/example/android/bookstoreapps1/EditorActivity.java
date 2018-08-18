@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,17 +31,19 @@ public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXISTING_BOOK_LOADER = 0;
-
+    int quantity = 0;
     private Uri mCurrentBookUri;
-
     private EditText mNameEditText;
     private EditText mPriceEditText;
     private EditText mQuantityEditText;
     private EditText mSupplierEditText;
     private EditText mPhoneNumberEditText;
+    private Button mDecreaseButton;
+    private Button mIncreaseButton;
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
-     * the view*/
+     * the view
+     */
     private boolean mBookHasChanged = false;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -49,12 +52,13 @@ public class EditorActivity extends AppCompatActivity implements
             return false;
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new pet or editing an existing one.
+        // in order to figure out if we're creating a new book entry or editing an existing one.
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
 
@@ -71,6 +75,8 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText = (EditText) findViewById(R.id.edit_book_quantity);
         mSupplierEditText = (EditText) findViewById(R.id.edit_book_supplier);
         mPhoneNumberEditText = (EditText) findViewById(R.id.edit_book_phone);
+        mIncreaseButton = (Button) findViewById(R.id.increase_quantity);
+        mDecreaseButton = (Button) findViewById(R.id.decrease_quantity);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -80,8 +86,11 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneNumberEditText.setOnTouchListener(mTouchListener);
-    }
+        mIncreaseButton.setOnTouchListener(mTouchListener);
+        mDecreaseButton.setOnTouchListener(mTouchListener);
 
+        mQuantityEditText.setText(String.valueOf(quantity));
+    }
 
     /**
      * Get user input from editor and save new book into database.
@@ -278,14 +287,16 @@ public class EditorActivity extends AppCompatActivity implements
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
         mPriceEditText.setText("");
-        mQuantityEditText.setText(0);
+        mQuantityEditText.setText("");
         mSupplierEditText.setText("");
         mPhoneNumberEditText.setText("");
     }
+
     /**
      * Show a dialog that warns the user there are unsaved changes
+     *
      * @param discardButtonClickListener is the click listener for what to do when
-     * the user confirms they want to discard their changes
+     *                                   the user confirms they want to discard their changes
      */
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
@@ -303,8 +314,9 @@ public class EditorActivity extends AppCompatActivity implements
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     /**
-     * Prompt the user to confirm that they want to delete this pet.
+     * Prompt the user to confirm that they want to delete this book entry.
      */
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
@@ -313,14 +325,11 @@ public class EditorActivity extends AppCompatActivity implements
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
                 deleteBook();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -340,14 +349,32 @@ public class EditorActivity extends AppCompatActivity implements
         if (mCurrentBookUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentBookUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
+                Toast.makeText(this, getString(R.string.delete_error),
                         Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, getString(R.string.editor_delete_pet_successful),
+                Toast.makeText(this, getString(R.string.delete_success),
                         Toast.LENGTH_SHORT).show();
             }
         }
 
         finish();
+    }
+
+    public void decrement(View view) {
+        quantity = Integer.valueOf(mQuantityEditText.getText().toString());
+        if (quantity == 0) {
+            Toast.makeText(this, getString(R.string.negative), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mQuantityEditText.setText(String.valueOf(quantity));
+        quantity = quantity - 1;
+        mQuantityEditText.setText(String.valueOf(quantity));
+
+    }
+
+    public void increment(View view) {
+        quantity = Integer.valueOf(mQuantityEditText.getText().toString());
+        quantity = quantity + 1;
+        mQuantityEditText.setText(String.valueOf(quantity));
     }
 }

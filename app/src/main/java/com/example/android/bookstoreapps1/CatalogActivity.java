@@ -150,7 +150,7 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        /** Update {@link BookCursorAdapter} with this new cursor containing updated book data*/
+        // Update BookCursorAdapter with this new cursor containing updated book data
         mCursorAdapter.swapCursor(data);
     }
 

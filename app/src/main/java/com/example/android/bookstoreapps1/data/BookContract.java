@@ -6,17 +6,20 @@ import android.provider.BaseColumns;
 
 public final class BookContract {
 
-    private BookContract() {}
+    public static final String CONTENT_AUTHORITY = "com.example.android.bookstoreapps1";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_BOOKS = "books";
+    private BookContract() {
+    }
 
-        public static final String CONTENT_AUTHORITY = "com.example.android.bookstoreapps1";
-        public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-        public static final String PATH_BOOKS = "books";
     /**
      * Inner class that defines constant values for the books database table.
      * Each entry in the table represents a single book entry.
      */
     public static final class BookEntry implements BaseColumns {
-        /** The content URI to access the book data in the provider */
+        /**
+         * The content URI to access the book data in the provider
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
